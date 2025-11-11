@@ -15,7 +15,7 @@ public class MenuForm extends JFrame
     public MenuForm()
     {
         setContentPane(MenuPrincipal);
-        setTitle( "Hola");
+        setTitle( "Bienvenido/a!");
         setDefaultCloseOperation( EXIT_ON_CLOSE );
         setSize( 300, 600 );
         setLocationRelativeTo(null);
@@ -51,7 +51,8 @@ public class MenuForm extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                JOptionPane.showMessageDialog( null, " You Pressed Button 2 :-) ");
+              //JOptionPane.showMessageDialog( null, " You Pressed Button 2 :-) ");
+                new FormTwo();
 
             }
         });
