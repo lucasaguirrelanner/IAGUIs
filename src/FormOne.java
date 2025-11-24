@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class FormOne extends JFrame
 {
@@ -19,11 +21,26 @@ public class FormOne extends JFrame
         setLocation(200, 500 );
         setVisible(true);
 
+        seMeOlvidóMiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+            new FormTwo ();
+            }
+        });
+        accederButton.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                new Cuenta();
 
-
+            }
+        });
     }
+}
 
 
 
-    }
+
 

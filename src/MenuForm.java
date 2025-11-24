@@ -51,8 +51,8 @@ public class MenuForm extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
-              //JOptionPane.showMessageDialog( null, " You Pressed Button 2 :-) ");
-                new FormTwo();
+              JOptionPane.showMessageDialog( null, " You Pressed Button 2 :-) ");
+
 
             }
         });
@@ -82,7 +82,7 @@ public class MenuForm extends JFrame
 
     public static void main(String[]args)
     {
-        //this is our entrry point
+        //this is our entry point
         new MenuForm();
     }
 }

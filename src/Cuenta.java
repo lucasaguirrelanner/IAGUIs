@@ -2,31 +2,33 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class FormTwo extends JFrame
+
+public class Cuenta extends JFrame
 {
     private JPanel MainPanel;
-    private JPasswordField passwordField1;
-    private JPasswordField passwordField2;
-    private JButton Regresar;
+    private JButton Agendarunacita;
+    private JButton Vermiscitas;
+    private JButton Cambiarmicuenta;
+    private JButton Salir;
 
     //this is our constructor!
-    public FormTwo()
+    public Cuenta()
     {
         setContentPane(MainPanel);
-        setTitle("Se me olvidó mi contraseña");
+        setTitle("Cuenta");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(300, 600);
         setLocation(200, 500);
         setVisible(true);
 
 
-        Regresar.addActionListener(new ActionListener()
+        Salir.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                JFrame FormTwo = (JFrame) SwingUtilities.getWindowAncestor(Regresar);
-                FormTwo.dispose();
+                JFrame Cuenta = (JFrame) SwingUtilities.getWindowAncestor(Salir);
+                Cuenta.dispose();
             }
         });
     }
