@@ -27,7 +27,7 @@
         <properties>
           <font name="Monaco" size="20"/>
           <foreground color="-350690"/>
-          <text value="CUENTA "/>
+          <text value="MI CUENTA "/>
         </properties>
       </component>
       <component id="e6988" class="javax.swing.JButton" binding="AgendarunacitaButton">
