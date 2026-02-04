@@ -6,44 +6,28 @@
       <xy x="20" y="20" width="500" height="400"/>
     </constraints>
     <properties>
-      <background color="-11778310"/>
+      <background color="-13948068"/>
     </properties>
     <border type="none"/>
     <children>
-      <component id="20f2e" class="javax.swing.JButton" binding="accederAMiCuentaButton">
+      <component id="20f2e" class="javax.swing.JButton" binding="SigninButton">
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Acceder a mi cuenta"/>
+          <font name="Futura" size="18"/>
+          <foreground color="-1803726"/>
+          <text value="Sign in to my account"/>
         </properties>
       </component>
-      <component id="d1eef" class="javax.swing.JButton" binding="Crearunacuentabutton">
+      <component id="d1eef" class="javax.swing.JButton" binding="Createaccountbutton">
         <constraints>
           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Crear una cuenta"/>
-        </properties>
-      </component>
-      <component id="ebaeb" class="javax.swing.JButton" binding="Button_salir">
-        <constraints>
-          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Salir"/>
-        </properties>
-      </component>
-      <component id="e4b2" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <background color="-11778310"/>
-          <enabled value="true"/>
-          <font name="Andale Mono" size="28"/>
-          <foreground color="-350690"/>
-          <text value="Bienvenido/a!"/>
+          <font name="Futura" size="18"/>
+          <foreground color="-1803726"/>
+          <text value="Create an account "/>
         </properties>
       </component>
       <hspacer id="536d3">
@@ -56,6 +40,28 @@
           <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
       </hspacer>
+      <component id="bf20d" class="javax.swing.JButton" binding="Button_exit">
+        <constraints>
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Futura" size="18"/>
+          <foreground color="-1803726"/>
+          <text value="Exit"/>
+        </properties>
+      </component>
+      <component id="e4b2" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-11778310"/>
+          <enabled value="true"/>
+          <font name="Futura" size="36"/>
+          <foreground color="-329992"/>
+          <text value="Welcome!!"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>

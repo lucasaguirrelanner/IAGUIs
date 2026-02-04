@@ -4,21 +4,21 @@ import java.awt.event.ActionListener;
 
 public class MenuForm extends JFrame {
     private JPanel MenuPrincipal;
-    private JButton accederAMiCuentaButton;
-    private JButton Crearunacuentabutton;
-    private JButton Button_salir;
+    private JButton SigninButton;
+    private JButton Createaccountbutton;
+    private JButton Button_exit;
 
     //this is our constructor!
     public MenuForm() {
         setContentPane(MenuPrincipal);
-        setTitle("Bienvenido/a!");
+        setTitle("Welcome!!");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(300, 600);
         setLocationRelativeTo(null);
         setVisible(true);
 
 
-        Button_salir.addActionListener(new ActionListener() {
+        Button_exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0); //Closed the applciation
@@ -27,7 +27,7 @@ public class MenuForm extends JFrame {
         });
 
 
-        accederAMiCuentaButton.addActionListener(new ActionListener() {
+        SigninButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //JOptionPane.showMessageDialog( null, " You Pressed Button 1 :-) ");
@@ -38,11 +38,11 @@ public class MenuForm extends JFrame {
 
         });
 
-        Crearunacuentabutton.addActionListener(new ActionListener() {
+        Createaccountbutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new CrearCuenta1();
-                
+
             }
         });
     }

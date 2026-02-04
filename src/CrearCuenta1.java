@@ -12,16 +12,16 @@ public class CrearCuenta1 extends JFrame
     private JComboBox combo_familiar;
     private JButton Continuar;
     private JButton borrarTodoButton;
+    private JButton regresarButton;
 
 
-
-public CrearCuenta1 ()
+    public CrearCuenta1 ()
 {
     setContentPane(MainPanel);
     setTitle("Crea una cuenta");
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-    setSize(300, 600);
-    setLocation(200, 500);
+    setSize(600, 600);
+    setLocation(50, 500);
     setVisible(true);
 
         borrarTodoButton.addActionListener(new ActionListener()
@@ -46,7 +46,14 @@ public CrearCuenta1 ()
     Continuar.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            newCrearCuenta2();
+            new CrearCuenta2();
+        }
+    });
+    regresarButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            new MenuForm();
+            dispose();
         }
     });
 }
