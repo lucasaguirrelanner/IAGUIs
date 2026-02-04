@@ -43,5 +43,11 @@ public CrearCuenta1 ()
 
             }
         });
-    }
+    Continuar.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            newCrearCuenta2();
+        }
+    });
+}
 }
