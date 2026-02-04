@@ -10,7 +10,7 @@
     </properties>
     <border type="none"/>
     <children>
-      <component id="20f2e" class="javax.swing.JButton" binding="button1Button" default-binding="true">
+      <component id="20f2e" class="javax.swing.JButton" binding="accederAMiCuentaButton">
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -18,7 +18,7 @@
           <text value="Acceder a mi cuenta"/>
         </properties>
       </component>
-      <component id="d1eef" class="javax.swing.JButton" binding="button2Button" default-binding="true">
+      <component id="d1eef" class="javax.swing.JButton" binding="Crearunacuentabutton">
         <constraints>
           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -26,7 +26,7 @@
           <text value="Crear una cuenta"/>
         </properties>
       </component>
-      <component id="ebaeb" class="javax.swing.JButton" binding="Button_exit">
+      <component id="ebaeb" class="javax.swing.JButton" binding="Button_salir">
         <constraints>
           <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>

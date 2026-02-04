@@ -8,8 +8,8 @@ public class FormOne extends JFrame
     private JButton Salir;
     private JButton accederButton;
     private JButton seMeOlvidóMiButton;
-    private JTextField textField1;
-    private JPasswordField passwordField1;
+    private JTextField txt_usuario;
+    private JPasswordField txt_contraseña;
 
     //this is our constructor!
     public FormOne()
