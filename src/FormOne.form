@@ -11,7 +11,7 @@
     </properties>
     <border type="none"/>
     <children>
-      <component id="6667e" class="javax.swing.JButton" binding="Salir">
+      <component id="6667e" class="javax.swing.JButton" binding="GoBackButton">
         <constraints>
           <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -19,7 +19,7 @@
           <font name="Futura" size="16" style="1"/>
           <foreground color="-1803726"/>
           <hideActionText value="true"/>
-          <text value="Salir"/>
+          <text value="Go Back"/>
         </properties>
       </component>
       <hspacer id="b6355">
@@ -27,27 +27,27 @@
           <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
       </hspacer>
-      <component id="f32cb" class="javax.swing.JLabel">
+      <component id="f32cb" class="javax.swing.JLabel" binding="txt_login">
         <constraints>
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <font name="Futura" size="22"/>
           <foreground color="-1803726"/>
-          <text value="Accede a tu cuenta"/>
+          <text value="Log into your account"/>
         </properties>
       </component>
-      <component id="c8c5b" class="javax.swing.JButton" binding="accederButton" default-binding="true">
+      <component id="c8c5b" class="javax.swing.JButton" binding="LoginButton">
         <constraints>
           <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <font name="Futura" size="16" style="1"/>
           <foreground color="-1803726"/>
-          <text value="Acceder "/>
+          <text value="Login"/>
         </properties>
       </component>
-      <component id="7f3a0" class="javax.swing.JButton" binding="seMeOlvidóMiButton" default-binding="true">
+      <component id="7f3a0" class="javax.swing.JButton" binding="ForgotMyButton">
         <constraints>
           <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -55,18 +55,10 @@
           <font name="Futura" size="16" style="1"/>
           <foreground color="-1803726"/>
           <hideActionText value="true"/>
-          <text value="Se me olvidó mi contraseña "/>
+          <text value="I forgot my password"/>
         </properties>
       </component>
-      <component id="500c7" class="javax.swing.JTextField" binding="txt_usuario">
-        <constraints>
-          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="57f1f" class="javax.swing.JPasswordField" binding="txt_contraseña">
+      <component id="57f1f" class="javax.swing.JPasswordField" binding="txt_password">
         <constraints>
           <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -84,25 +76,33 @@
           <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
       </hspacer>
-      <component id="a50bf" class="javax.swing.JLabel">
+      <component id="a50bf" class="javax.swing.JLabel" binding="txt_pw">
         <constraints>
           <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <font name="Futura" size="20"/>
           <foreground color="-329992"/>
-          <text value="Contraseña"/>
+          <text value="Password:"/>
         </properties>
       </component>
-      <component id="ef113" class="javax.swing.JLabel">
+      <component id="ef113" class="javax.swing.JLabel" binding="txt_username">
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <font name="Futura" size="20"/>
           <foreground color="-329992"/>
-          <text value="Usuario"/>
+          <text value="Username:"/>
         </properties>
+      </component>
+      <component id="2cb48" class="javax.swing.JTextField" binding="txt_user">
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties/>
       </component>
     </children>
   </grid>

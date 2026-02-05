@@ -5,11 +5,14 @@ import java.awt.event.ActionListener;
 public class FormOne extends JFrame
 {
     private JPanel MainPanel;
-    private JButton Salir;
-    private JButton accederButton;
-    private JButton seMeOlvidóMiButton;
-    private JTextField txt_usuario;
-    private JPasswordField txt_contraseña;
+    private JButton GoBackButton;
+    private JButton LoginButton;
+    private JButton ForgotMyButton;
+    private JPasswordField txt_password;
+    private JLabel txt_login;
+    private JLabel txt_username;
+    private JLabel txt_pw;
+    private JTextField txt_user;
 
     //this is our constructor!
     public FormOne()
@@ -17,24 +20,32 @@ public class FormOne extends JFrame
         setContentPane(MainPanel);
         setTitle("Accede a tu cuenta");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(300, 600);
+        setSize(600, 600);
         setLocation(200, 500 );
         setVisible(true);
 
-        seMeOlvidóMiButton.addActionListener(new ActionListener() {
+        ForgotMyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e)
             {
             new FormTwo ();
             }
         });
-        accederButton.addActionListener(new ActionListener()
+        LoginButton.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
                 new Cuenta();
+                dispose();
 
+            }
+        });
+        GoBackButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new MenuForm();
+                dispose();
             }
         });
     }

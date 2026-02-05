@@ -7,8 +7,8 @@ public class Cuenta extends JFrame
 {
     private JPanel MainPanel;
     private JButton AgendarunacitaButton;
-    private JButton verMisCitasButton;
-    private JButton cambiarMiCuentaButton;
+    private JButton viewYourAppointmentsButton;
+    private JButton modifyMyAccountButton;
     private JButton salirButton;
 
     //this is our constructor!
@@ -17,7 +17,7 @@ public class Cuenta extends JFrame
         setContentPane(MainPanel);
         setTitle("Cuenta");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(300, 600);
+        setSize(600, 600);
         setLocation(200, 500);
         setVisible(true);
 

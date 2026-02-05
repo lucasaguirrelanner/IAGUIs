@@ -13,7 +13,7 @@ public class MenuForm extends JFrame {
         setContentPane(MenuPrincipal);
         setTitle("Welcome!!");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(300, 600);
+        setSize(800, 600);
         setLocationRelativeTo(null);
         setVisible(true);
 

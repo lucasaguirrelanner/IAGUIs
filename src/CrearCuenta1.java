@@ -6,13 +6,13 @@ public class CrearCuenta1 extends JFrame
 
 {
     private JPanel MainPanel;
-    private JTextField txt_Nombre;
-    private JTextField txt_apellido;
-    private JTextField txt_correo;
-    private JComboBox combo_familiar;
-    private JButton Continuar;
-    private JButton borrarTodoButton;
-    private JButton regresarButton;
+    private JButton Continue;
+    private JButton ResetButton;
+    private JButton GoBackButton;
+    private JLabel txt_lastname;
+    private JLabel txt_firstname;
+    private JLabel txt_mail;
+    private JComboBox combo_famacc;
 
 
     public CrearCuenta1 ()
@@ -24,37 +24,45 @@ public class CrearCuenta1 extends JFrame
     setLocation(50, 500);
     setVisible(true);
 
-        borrarTodoButton.addActionListener(new ActionListener()
+    combo_famacc.addItem("Yes");
+    combo_famacc.addItem("No");
+    combo_famacc.setSelectedItem("Yes");
+
+        ResetButton.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
 
-                txt_apellido.setText("");
-                txt_correo.setText("");
-                txt_Nombre.setText("");
+                txt_firstname.setText("");
+               txt_lastname.setText("");
+                txt_mail.setText("");
+
+                combo_famacc.setSelectedItem("Yes");
 
             }
         });
-        Continuar.addActionListener(new ActionListener() {
+        Continue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-
+                new CrearCuenta2();
+                dispose();
             }
         });
-    Continuar.addActionListener(new ActionListener() {
+    Continue.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             new CrearCuenta2();
         }
     });
-    regresarButton.addActionListener(new ActionListener() {
+    GoBackButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             new MenuForm();
             dispose();
         }
     });
-}
+
+    }
 }

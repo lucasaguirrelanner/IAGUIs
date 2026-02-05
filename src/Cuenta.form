@@ -6,7 +6,7 @@
       <xy x="20" y="20" width="500" height="400"/>
     </constraints>
     <properties>
-      <background color="-11778310"/>
+      <background color="-13948068"/>
     </properties>
     <border type="none"/>
     <children>
@@ -22,12 +22,12 @@
       </hspacer>
       <component id="45b26" class="javax.swing.JLabel">
         <constraints>
-          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <font name="Monaco" size="20"/>
-          <foreground color="-350690"/>
-          <text value="MI CUENTA "/>
+          <font name="Futura" size="28" style="1"/>
+          <foreground color="-1803726"/>
+          <text value="MY ACCOUNT"/>
         </properties>
       </component>
       <component id="e6988" class="javax.swing.JButton" binding="AgendarunacitaButton">
@@ -35,15 +35,19 @@
           <grid row="1" column="1" row-span="5" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Agendar una cita "/>
+          <font name="Futura" size="18" style="1"/>
+          <foreground color="-1803726"/>
+          <text value="Book an appointment"/>
         </properties>
       </component>
-      <component id="c75ae" class="javax.swing.JButton" binding="verMisCitasButton" default-binding="true">
+      <component id="c75ae" class="javax.swing.JButton" binding="viewYourAppointmentsButton" default-binding="true">
         <constraints>
           <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Ver mis citas "/>
+          <font name="Futura" size="16" style="1"/>
+          <foreground color="-1803726"/>
+          <text value="View your appointments"/>
         </properties>
       </component>
       <component id="82769" class="javax.swing.JButton" binding="salirButton" default-binding="true">
@@ -51,15 +55,19 @@
           <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Salir "/>
+          <font name="Futura" size="16" style="1"/>
+          <foreground color="-1803726"/>
+          <text value="Exit"/>
         </properties>
       </component>
-      <component id="88518" class="javax.swing.JButton" binding="cambiarMiCuentaButton" default-binding="true">
+      <component id="88518" class="javax.swing.JButton" binding="modifyMyAccountButton" default-binding="true">
         <constraints>
           <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Cambiar mi cuenta"/>
+          <font name="Futura" size="16" style="1"/>
+          <foreground color="-1803726"/>
+          <text value="Modify my account"/>
         </properties>
       </component>
     </children>

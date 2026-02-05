@@ -26,7 +26,7 @@ public class CrearCuenta2 extends JFrame
         createAccountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Account_Created();
+                new Account_Created1();
             }
         });
         resetButton.addActionListener(new ActionListener() {
