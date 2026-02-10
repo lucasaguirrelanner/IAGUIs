@@ -1,6 +1,23 @@
+//GUI imports
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+//sql imports(database)
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+//file imports
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+
 
 public class MenuForm extends JFrame {
     private JPanel MenuPrincipal;
@@ -13,7 +30,7 @@ public class MenuForm extends JFrame {
         setContentPane(MenuPrincipal);
         setTitle("Welcome!!");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(800, 600);
+        setSize(950, 700);
         setLocationRelativeTo(null);
         setVisible(true);
 

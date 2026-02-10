@@ -6,10 +6,11 @@ import java.awt.event.ActionListener;
 public class Cuenta extends JFrame
 {
     private JPanel MainPanel;
-    private JButton AgendarunacitaButton;
+    private JButton bookappointment;
     private JButton viewYourAppointmentsButton;
     private JButton modifyMyAccountButton;
-    private JButton salirButton;
+    private JButton gobackbutton;
+    private JButton exitButton;
 
     //this is our constructor!
     public Cuenta()
@@ -22,12 +23,12 @@ public class Cuenta extends JFrame
         setVisible(true);
 
 
-        salirButton.addActionListener(new ActionListener()
+        exitButton.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                JFrame Cuenta = (JFrame) SwingUtilities.getWindowAncestor(salirButton);
+                JFrame Cuenta = (JFrame) SwingUtilities.getWindowAncestor(exitButton);
                 Cuenta.dispose();
             }
         });

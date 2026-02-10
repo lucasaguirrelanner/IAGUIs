@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 
 public class CrearCuenta2 extends JFrame
 
@@ -18,7 +19,7 @@ public class CrearCuenta2 extends JFrame
         setContentPane(MainPanel);
         setTitle("You're almost finished creating your account! ");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(600, 600);
+        setSize(800, 700);
         setLocation(50, 500);
         setVisible(true);
 
@@ -26,7 +27,7 @@ public class CrearCuenta2 extends JFrame
         createAccountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Account_Created1();
+                JOptionPane.showMessageDialog(null,"Account was successfuly created!!!");
             }
         });
         resetButton.addActionListener(new ActionListener() {
