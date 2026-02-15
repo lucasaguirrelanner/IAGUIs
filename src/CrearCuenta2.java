@@ -1,12 +1,11 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JOptionPane;
 
 public class CrearCuenta2 extends JFrame
 
 {
-    private JPanel MainPanel;
+    private JPanel AccSetUp2;
     private JTextField txt_username;
     private JPasswordField password;
     private JPasswordField passwordVF;
@@ -16,18 +15,21 @@ public class CrearCuenta2 extends JFrame
 
     public CrearCuenta2()
     {
-        setContentPane(MainPanel);
+        if (AccSetUp2 == null) {
+            AccSetUp2 = new JPanel();
+        }
+        setContentPane(AccSetUp2);
         setTitle("You're almost finished creating your account! ");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(800, 700);
-        setLocation(50, 500);
+        setLocationRelativeTo(null);
         setVisible(true);
 
 
         createAccountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,"Account was successfuly created!!!");
+
             }
         });
         resetButton.addActionListener(new ActionListener() {
@@ -36,6 +38,11 @@ public class CrearCuenta2 extends JFrame
                 txt_username.setText("");
                 password.setText("");
                 passwordVF.setText("");
+
+                if (password != passwordVF)
+                {
+
+                }
             }
         });
         goBackButton.addActionListener(new ActionListener() {
@@ -46,5 +53,6 @@ public class CrearCuenta2 extends JFrame
             }
         });
     }
+
 }
 

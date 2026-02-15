@@ -35,7 +35,7 @@ public class FormOne extends JFrame
         setTitle("Accede a tu cuenta");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(600, 600);
-        setLocation(200, 500 );
+        setLocationRelativeTo(null );
         setVisible(true);
 
         ForgotMyButton.addActionListener(new ActionListener() {

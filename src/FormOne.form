@@ -34,7 +34,7 @@
         <properties>
           <font name="Futura" size="22"/>
           <foreground color="-1803726"/>
-          <text value="Log into your account"/>
+          <text value="LOGIN TO YOUR ACCOUNT"/>
         </properties>
       </component>
       <component id="c8c5b" class="javax.swing.JButton" binding="LoginButton">

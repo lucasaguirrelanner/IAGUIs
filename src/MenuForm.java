@@ -4,18 +4,12 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-//sql imports(database)
-
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-//file imports
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
+
 
 
 
@@ -34,6 +28,16 @@ public class MenuForm extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
 
+try (Connection conn=DatabaseHelper.getConnection()) {
+    if (conn != null)
+    {
+        System.out.println(" Connection Successful! ");
+    }
+
+}catch(Exception e) {
+    javax.swing.JOptionPane.showMessageDialog(this, "Database Error:" + e.getMessage());
+    e.printStackTrace();
+}
 
         Button_exit.addActionListener(new ActionListener() {
             @Override
@@ -49,6 +53,7 @@ public class MenuForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 //JOptionPane.showMessageDialog( null, " You Pressed Button 1 :-) ");
                 new FormOne();
+                dispose();
 
             }
 
@@ -64,7 +69,7 @@ public class MenuForm extends JFrame {
         });
     }
 
-        public static void main (String[]args)
+    public static void main (String[]args)
         {
             //this is our entry point
             new MenuForm();

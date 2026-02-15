@@ -10,6 +10,7 @@ public class Cuenta extends JFrame
     private JButton viewYourAppointmentsButton;
     private JButton modifyMyAccountButton;
     private JButton gobackbutton;
+    private JButton changeAnAppointmentButton;
     private JButton exitButton;
 
     //this is our constructor!
@@ -19,7 +20,7 @@ public class Cuenta extends JFrame
         setTitle("Cuenta");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(600, 600);
-        setLocation(200, 500);
+        setLocationRelativeTo(null);
         setVisible(true);
 
 
@@ -30,6 +31,14 @@ public class Cuenta extends JFrame
             {
                 JFrame Cuenta = (JFrame) SwingUtilities.getWindowAncestor(exitButton);
                 Cuenta.dispose();
+            }
+        });
+        bookappointment.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                new APPOINTMENT();
+                dispose();
             }
         });
     }

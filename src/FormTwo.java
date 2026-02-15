@@ -16,7 +16,7 @@ public class FormTwo extends JFrame
         setTitle("Se me olvidó mi contraseña");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(300, 600);
-        setLocation(200, 500);
+        setLocationRelativeTo(null);
         setVisible(true);
 
 
