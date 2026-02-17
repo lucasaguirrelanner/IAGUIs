@@ -1,17 +1,8 @@
-//GUI imports
-
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.util.Properties;
-
-
-
 
 public class MenuForm extends JFrame {
     private JPanel MenuPrincipal;
@@ -19,62 +10,47 @@ public class MenuForm extends JFrame {
     private JButton Createaccountbutton;
     private JButton Button_exit;
 
-    //this is our constructor!
     public MenuForm() {
+
         setContentPane(MenuPrincipal);
-        setTitle("Welcome!!");
+        setTitle("Duperly & Lanner - Welcome");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(950, 700);
+        setSize(1100, 700);
         setLocationRelativeTo(null);
+
+        // --- 2. Connection Health Check ---
+        try (Connection conn = DatabaseHelper.getConnection()) {
+            if (conn != null) {
+                System.out.println("Database Connection Verified.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "System Error: Cannot reach the database.\nPlease check config.properties.",
+                    "Connection Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        // --- 3. Action Listeners ---
+        Button_exit.addActionListener(e -> System.exit(0));
+
+        SigninButton.addActionListener(e -> {
+            new LogIn(); // Assuming LogIn is your next form
+            dispose();
+        });
+
+        Createaccountbutton.addActionListener(e -> {
+            new CrearCuenta1(); // Opens the first step of registration
+            dispose(); // Dispose to keep the workspace clean
+        });
+
         setVisible(true);
 
-try (Connection conn=DatabaseHelper.getConnection()) {
-    if (conn != null)
-    {
-        System.out.println(" Connection Successful! ");
     }
 
-}catch(Exception e) {
-    javax.swing.JOptionPane.showMessageDialog(this, "Database Error:" + e.getMessage());
-    e.printStackTrace();
-}
-
-        Button_exit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0); //Closed the applciation
-
-            }
-        });
-
-
-        SigninButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //JOptionPane.showMessageDialog( null, " You Pressed Button 1 :-) ");
-                new FormOne();
-                dispose();
-
-            }
-
-
-        });
-
-        Createaccountbutton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new CrearCuenta1();
-
-            }
-        });
+        public static void main (String[]args){
+            // Run on the Event Dispatch Thread for thread safety
+            SwingUtilities.invokeLater(MenuForm::new);
+        }
     }
 
-    public static void main (String[]args)
-        {
-            //this is our entry point
-            new MenuForm();
-        }
 
-
-        }
 
