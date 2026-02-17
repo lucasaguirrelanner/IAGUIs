@@ -7,38 +7,36 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
-public class APPOINTMENT extends JFrame {
+public class FAMAPPOINTMENT extends JFrame {
 
-    private JPanel APPPanel;
-    private JLabel ProcedureLabel;
-    private final String userEmail;
+    private static final String MYSELF_LABEL = "Myself (account holder)";
+    private JPanel FAMACCPanel;
+    private final String contactEmail;
+    private final String parentName;
     private final String userName;
-    private final boolean isChild;
+    private JComboBox<String> memberCombo;
     private JComboBox<String> doctorCombo;
     private JComboBox<String> procedureCombo;
     private JComboBox<String> timeCombo;
     private JSpinner dateSpinner;
     private JButton checkButton, confirmButton, backButton;
     private JLabel statusLabel;
+    private List<String[]> memberDetails;
 
-    // ── Existing two-arg constructor — all current call sites still compile ──
-    public APPOINTMENT(String email, String name) {
-        this(email, name, false);
-    }
+    public FAMAPPOINTMENT(String email, String name) {
+        this.contactEmail = email;
+        this.userName = name;
+        this.parentName = name;
 
-    // ── New three-arg constructor used when booking for a child ──
-    public APPOINTMENT(String email, String name, boolean isChild) {
-        this.userEmail = email;
-        this.userName  = name;
-        this.isChild   = isChild;
-
-        setTitle("Duperly & Lanner Grupo Dental – Book Appointment");
-        setSize(820, 600);
+        setTitle("Duperly & Lanner Grupo Dental – Family Appointment");
+        setSize(820, 650);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
         buildUI();
+        loadMembers();
         loadDoctors();
+
         setVisible(true);
     }
 
@@ -46,7 +44,7 @@ public class APPOINTMENT extends JFrame {
         JPanel root = new JPanel(new BorderLayout());
         root.setBackground(new Color(30, 30, 60));
 
-        JLabel header = new JLabel("Schedule an Appointment", SwingConstants.CENTER);
+        JLabel header = new JLabel("Family Member Appointment", SwingConstants.CENTER);
         header.setFont(new Font("Arial", Font.BOLD, 22));
         header.setForeground(new Color(228, 122, 50));
         header.setBorder(new EmptyBorder(20, 0, 10, 0));
@@ -56,70 +54,75 @@ public class APPOINTMENT extends JFrame {
         form.setBackground(new Color(30, 30, 60));
         form.setBorder(new EmptyBorder(10, 60, 10, 60));
         GridBagConstraints g = new GridBagConstraints();
-        g.insets = new Insets(3, 8, 3, 8);
+        g.insets = new Insets(3, 8, 3, 8);  // Reduced from 8 to 3
         g.fill = GridBagConstraints.HORIZONTAL;
         g.anchor = GridBagConstraints.WEST;
 
+        // Booking For
+        addLabel(form, "Booking For:", g, 0, 0);
+        memberCombo = new JComboBox<>();
+        memberCombo.addActionListener(e -> loadDoctors());
+        styleCombo(memberCombo);
+        g.gridx = 1; g.gridy = 0; g.weightx = 1;
+        form.add(memberCombo, g);
+
         // Doctor
-        addLabel(form, "Select Doctor:", g, 0, 0);
+        addLabel(form, "Select Doctor:", g, 0, 1);
         doctorCombo = new JComboBox<>();
-        doctorCombo.setFont(new Font("Arial", Font.PLAIN, 13));
         doctorCombo.addActionListener(e -> loadProcedures());
         styleCombo(doctorCombo);
-        g.gridx = 1; g.gridy = 0; g.weightx = 1;
+        g.gridx = 1; g.gridy = 1;
         form.add(doctorCombo, g);
 
         // Procedure
-        addLabel(form, "Select Procedure:", g, 0, 1);
+        addLabel(form, "Select Procedure:", g, 0, 2);
         procedureCombo = new JComboBox<>();
         styleCombo(procedureCombo);
-        g.gridx = 1; g.gridy = 1;
+        g.gridx = 1; g.gridy = 2;
         form.add(procedureCombo, g);
 
         // Date
-        addLabel(form, "Select Date:", g, 0, 2);
-        SpinnerDateModel dateModel = new SpinnerDateModel();
-        dateSpinner = new JSpinner(dateModel);
-        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateSpinner, "dd/MM/yyyy");
-        dateSpinner.setEditor(dateEditor);
+        addLabel(form, "Select Date:", g, 0, 3);
+        dateSpinner = new JSpinner(new SpinnerDateModel());
+        dateSpinner.setEditor(new JSpinner.DateEditor(dateSpinner, "dd/MM/yyyy"));
         dateSpinner.setValue(new Date(System.currentTimeMillis() + 86400000L));
-        g.gridx = 1; g.gridy = 2;
+        g.gridx = 1; g.gridy = 3;
         form.add(dateSpinner, g);
 
         // Time
-        addLabel(form, "Select Time:", g, 0, 3);
+        addLabel(form, "Select Time:", g, 0, 4);
         timeCombo = new JComboBox<>(new String[]{
                 "08:00","09:00","10:00","11:00","13:00","14:00","15:00","16:00"
         });
         styleCombo(timeCombo);
-        g.gridx = 1; g.gridy = 3;
+        g.gridx = 1; g.gridy = 4;
         form.add(timeCombo, g);
 
-        // Status label
+        // Status
         statusLabel = new JLabel(" ", SwingConstants.CENTER);
         statusLabel.setForeground(Color.YELLOW);
         statusLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        g.gridx = 0; g.gridy = 4; g.gridwidth = 2;
+        g.gridx = 0; g.gridy = 5; g.gridwidth = 2;
         form.add(statusLabel, g);
 
         root.add(form, BorderLayout.CENTER);
 
+        // FIXED: Buttons with white background and dark text
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 15));
         btnPanel.setBackground(new Color(30, 30, 60));
-        checkButton   = styledButton("Check Availability", new Color(80, 140, 200));
-        confirmButton = styledButton("Confirm Booking",    new Color(228, 122, 50));
-        backButton    = styledButton("Back",               new Color(100, 100, 100));
+        checkButton = styledButton("Check Availability", new Color(80, 140, 200));
+        confirmButton = styledButton("Confirm Booking", new Color(228, 122, 50));
+        backButton = styledButton("Back", new Color(100, 100, 100));
         btnPanel.add(checkButton);
         btnPanel.add(confirmButton);
         btnPanel.add(backButton);
         root.add(btnPanel, BorderLayout.SOUTH);
-
         setContentPane(root);
 
-        checkButton.addActionListener(e   -> checkAvailability());
+        checkButton.addActionListener(e -> checkAvailability());
         confirmButton.addActionListener(e -> bookAppointment());
         backButton.addActionListener(e -> {
-            new Account(userEmail, DatabaseHelper.getFirstName(userEmail));
+            new Account(contactEmail, userName);
             dispose();
         });
     }
@@ -132,10 +135,11 @@ public class APPOINTMENT extends JFrame {
         p.add(l, g);
     }
 
+    // FIXED: Buttons now have white/light background with dark text
     private JButton styledButton(String text, Color accentColor) {
         JButton btn = new JButton(text);
         btn.setBackground(Color.WHITE);
-        btn.setForeground(accentColor);
+        btn.setForeground(accentColor);  // Dark colored text
         btn.setFont(new Font("Arial", Font.BOLD, 13));
         btn.setFocusPainted(false);
         btn.setBorderPainted(true);
@@ -151,21 +155,32 @@ public class APPOINTMENT extends JFrame {
         combo.setFont(new Font("Arial", Font.PLAIN, 13));
     }
 
+    private void loadMembers() {
+        memberDetails = DatabaseHelper.getFamilyMembersDetailed(contactEmail);
+        memberCombo.removeAllItems();
+        memberCombo.addItem(MYSELF_LABEL);
+        for (String[] m : memberDetails) memberCombo.addItem(m[1]);
+    }
+
     private void loadDoctors() {
         doctorCombo.removeAllItems();
-        List<String> names = isChild
-                ? DatabaseHelper.getDentistNamesForChildren()
-                : DatabaseHelper.getDentistNames();
+
+        // Use the DB flag instead of string-matching
+        List<String> names = isBookingForSelf()
+                ? DatabaseHelper.getDentistNames()
+                : DatabaseHelper.getDentistNamesForChildren();
+
         if (names.isEmpty()) {
-            if (isChild) {
-                doctorCombo.addItem("Agnes Lanner");
-                doctorCombo.addItem("Vanessa Jarra");
-            } else {
+            if (isBookingForSelf()) {
                 doctorCombo.addItem("Dr. Smith");
-                doctorCombo.addItem("Dr. Johnson");
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "No paediatric dentists found in the database.\n" +
+                                "Please ensure Agnes and Vanessa are added to the Dentist table.",
+                        "No Paediatric Dentist", JOptionPane.WARNING_MESSAGE);
             }
         } else {
-            for (String n : names) doctorCombo.addItem(n);
+            for (String d : names) doctorCombo.addItem(d);
         }
         loadProcedures();
     }
@@ -174,8 +189,7 @@ public class APPOINTMENT extends JFrame {
         String doctor = (String) doctorCombo.getSelectedItem();
         if (doctor == null) return;
         procedureCombo.removeAllItems();
-        List<String> procs = DatabaseHelper.getProceduresForDentist(doctor);
-        for (String proc : procs) procedureCombo.addItem(proc);
+        for (String p : DatabaseHelper.getProceduresForDentist(doctor)) procedureCombo.addItem(p);
         refreshBlockedSlots();
     }
 
@@ -214,22 +228,21 @@ public class APPOINTMENT extends JFrame {
         }
     }
     private void checkAvailability() {
-        String doctor    = (String) doctorCombo.getSelectedItem();
+        String doctor = (String) doctorCombo.getSelectedItem();
         String procedure = (String) procedureCombo.getSelectedItem();
-        String time      = (String) timeCombo.getSelectedItem();
+        String time = (String) timeCombo.getSelectedItem();
         if (doctor == null || procedure == null || time == null) {
-            statusLabel.setText("Please select all fields first.");
-            statusLabel.setForeground(Color.YELLOW);
+            statusLabel.setText("Please select all fields.");
             return;
         }
-        LocalDateTime start    = buildDateTime(time);
-        int           duration = DatabaseHelper.getProcedureDuration(procedure);
-        if (DatabaseHelper.isSlotAvailable(doctor, start, duration)) {
-            statusLabel.setText("✔ Slot available! Appointment would end at: "
-                    + start.plusMinutes(duration).format(DateTimeFormatter.ofPattern("HH:mm")));
+        int dur = DatabaseHelper.getProcedureDuration(procedure);
+        LocalDateTime start = buildDateTime(time);
+        if (DatabaseHelper.isSlotAvailable(doctor, start, dur)) {
+            statusLabel.setText("✔ Available! Ends at: " +
+                    start.plusMinutes(dur).format(DateTimeFormatter.ofPattern("HH:mm")));
             statusLabel.setForeground(Color.GREEN);
         } else {
-            statusLabel.setText("✘ This slot overlaps with an existing appointment. Choose another time.");
+            statusLabel.setText("✘ Slot unavailable. Choose another time.");
             statusLabel.setForeground(Color.RED);
         }
     }
@@ -244,59 +257,89 @@ public class APPOINTMENT extends JFrame {
             return;
         }
 
-        LocalDateTime start    = buildDateTime(time);
-        int           duration = DatabaseHelper.getProcedureDuration(procedure);
+        LocalDateTime start = buildDateTime(time);
+        int           dur   = DatabaseHelper.getProcedureDuration(procedure);
 
-        if (!DatabaseHelper.isSlotAvailable(doctor, start, duration)) {
-            JOptionPane.showMessageDialog(this,
-                    "This time slot is already taken. Please choose another.",
-                    "Slot Unavailable", JOptionPane.WARNING_MESSAGE);
+        if (!DatabaseHelper.isSlotAvailable(doctor, start, dur)) {
+            JOptionPane.showMessageDialog(this, "Slot is taken. Choose another time.",
+                    "Unavailable", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        String patientName = DatabaseHelper.getPatientNameByEmail(userEmail);
-        if (patientName == null) {
-            JOptionPane.showMessageDialog(this, "Error: Could not retrieve patient info.");
-            return;
+        boolean self = isBookingForSelf();
+        String  patientName;
+        Integer familyId    = null;
+        boolean isFamilyMbr = false;
+
+        if (self) {
+            patientName = parentName != null
+                    ? parentName
+                    : DatabaseHelper.getFirstName(contactEmail);
+
+            // One appointment per day — account holder
+            if (DatabaseHelper.patientHasAppointmentOnDate(contactEmail, start.toLocalDate())) {
+                JOptionPane.showMessageDialog(this,
+                        "You already have an appointment on this date.\n" +
+                                "Only one appointment per day is allowed.",
+                        "Booking Not Allowed", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+        } else {
+            int idx = memberCombo.getSelectedIndex() - 1;
+            if (idx < 0 || idx >= memberDetails.size()) {
+                JOptionPane.showMessageDialog(this, "Please select a valid patient.");
+                return;
+            }
+            String[] member = memberDetails.get(idx);
+            patientName = member[1];
+            familyId    = Integer.parseInt(member[0]);
+            isFamilyMbr = true;
+
+            // One appointment per day — family member
+            if (DatabaseHelper.familyMemberHasAppointmentOnDate(familyId, start.toLocalDate())) {
+                JOptionPane.showMessageDialog(this,
+                        patientName + " already has an appointment on this date.\n" +
+                                "Only one appointment per day is allowed.",
+                        "Booking Not Allowed", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
         }
 
-        if (DatabaseHelper.patientHasAppointmentOnDate(userEmail, start.toLocalDate())) {
-            JOptionPane.showMessageDialog(this,
-                    "You already have an appointment on this date.\n" +
-                            "Only one appointment per day is allowed.",
-                    "Booking Not Allowed", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        String endTime = start.plusMinutes(duration).format(DateTimeFormatter.ofPattern("HH:mm"));
-        String confirm = String.format(
-                "<html><b>Please confirm your appointment:</b><br><br>" +
-                        "Patient:    <b>%s</b><br>" +
-                        "Doctor:     <b>Dr. %s</b><br>" +
-                        "Procedure:  <b>%s</b><br>" +
-                        "Date:       <b>%s</b><br>" +
-                        "Time:       <b>%s – %s</b><br><br>" +
-                        "A confirmation email will be sent to:<br><i>%s</i></html>",
+        String endTime = start.plusMinutes(dur).format(DateTimeFormatter.ofPattern("HH:mm"));
+        String msg = String.format(
+                "<html><b>Confirm appointment%s:</b><br><br>" +
+                        "Patient:   <b>%s</b><br>" +
+                        "Doctor:    <b>Dr. %s</b><br>" +
+                        "Procedure: <b>%s</b><br>" +
+                        "Date:      <b>%s</b><br>" +
+                        "Time:      <b>%s – %s</b><br><br>" +
+                        "Confirmation sent to: <i>%s</i></html>",
+                self ? "" : " for family member",
                 patientName, doctor, procedure,
                 start.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                time, endTime, userEmail);
+                time, endTime, contactEmail);
 
-        int choice = JOptionPane.showConfirmDialog(this, confirm,
-                "Confirm Appointment", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        int choice = JOptionPane.showConfirmDialog(this, msg,
+                "Confirm Appointment", JOptionPane.YES_NO_OPTION);
         if (choice != JOptionPane.YES_OPTION) return;
 
         boolean ok = DatabaseHelper.createAppointment(
-                userEmail, patientName, start, procedure, doctor);
+                contactEmail, patientName, start, procedure, doctor, isFamilyMbr, familyId);
+
         if (ok) {
-            new AppointmentSuccess(patientName, procedure,
+            new AppointmentSuccess(
+                    patientName, procedure,
                     start.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
-                    userEmail, userName);
+                    contactEmail, userName);
             dispose();
         } else {
-            JOptionPane.showMessageDialog(this,
-                    "Error saving appointment. Please try again.",
+            JOptionPane.showMessageDialog(this, "Error saving appointment. Please try again.",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    private boolean isBookingForSelf() {
+        return MYSELF_LABEL.equals(memberCombo.getSelectedItem());
     }
 
     private LocalDate getSelectedDate() {
@@ -304,9 +347,8 @@ public class APPOINTMENT extends JFrame {
         return d.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
     }
 
-    private LocalDateTime buildDateTime(String timeStr) {
-        LocalDate date  = getSelectedDate();
-        String[]  parts = timeStr.split(":");
-        return date.atTime(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+    private LocalDateTime buildDateTime(String time) {
+        String[] p = time.split(":");
+        return getSelectedDate().atTime(Integer.parseInt(p[0]), Integer.parseInt(p[1]));
     }
 }

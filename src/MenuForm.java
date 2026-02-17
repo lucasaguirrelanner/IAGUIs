@@ -1,17 +1,5 @@
-//GUI imports
-
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.util.Properties;
-
-
-
 
 public class MenuForm extends JFrame {
     private JPanel MenuPrincipal;
@@ -19,62 +7,42 @@ public class MenuForm extends JFrame {
     private JButton Createaccountbutton;
     private JButton Button_exit;
 
-    //this is our constructor!
     public MenuForm() {
         setContentPane(MenuPrincipal);
-        setTitle("Welcome!!");
+        // Criterion #10 – official name in title
+        setTitle("Duperly & Lanner Grupo Dental – Welcome");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(950, 700);
+        setSize(1100, 700);
         setLocationRelativeTo(null);
+
+        // Verify DB connection on startup
+        try (Connection conn = DatabaseHelper.getConnection()) {
+            if (conn != null) System.out.println("Database connection verified.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Cannot connect to the database.\nCheck config.properties.",
+                    "Connection Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        Button_exit.addActionListener(e -> System.exit(0));
+
+        SigninButton.addActionListener(e -> {
+            new LogIn();
+            dispose();
+        });
+
+        Createaccountbutton.addActionListener(e -> {
+            new CreateAccount1();
+            dispose();
+        });
+
         setVisible(true);
-
-try (Connection conn=DatabaseHelper.getConnection()) {
-    if (conn != null)
-    {
-        System.out.println(" Connection Successful! ");
     }
 
-}catch(Exception e) {
-    javax.swing.JOptionPane.showMessageDialog(this, "Database Error:" + e.getMessage());
-    e.printStackTrace();
+    public static void main(String[] args) {
+        // Criterion #9 – start reminder service when app launches
+        ReminderService.start();
+
+        SwingUtilities.invokeLater(MenuForm::new);
+    }
 }
-
-        Button_exit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0); //Closed the applciation
-
-            }
-        });
-
-
-        SigninButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //JOptionPane.showMessageDialog( null, " You Pressed Button 1 :-) ");
-                new FormOne();
-                dispose();
-
-            }
-
-
-        });
-
-        Createaccountbutton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new CrearCuenta1();
-
-            }
-        });
-    }
-
-    public static void main (String[]args)
-        {
-            //this is our entry point
-            new MenuForm();
-        }
-
-
-        }
-

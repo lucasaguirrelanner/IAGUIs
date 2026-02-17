@@ -55,9 +55,9 @@
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <background color="-11778310"/>
+          <background color="-13948068"/>
           <enabled value="true"/>
-          <font name="Futura" size="36" style="1"/>
+          <font name="Futura" size="36" style="0"/>
           <foreground color="-1803726"/>
           <text value="WELCOME TO DUPERLY AND LANNER DENTAL GROUP!!!!"/>
         </properties>
