@@ -18,13 +18,13 @@ public class Restablishpassword extends JFrame {
         setSize(800, 700);
         setLocationRelativeTo(null);
 
-
+        //Fields are left blank when the rest button is touched:
         Resetbutton.addActionListener(e -> {
             passwordField1.setText("");
             passwordField2.setText("");
         });
         Regresar.addActionListener(e -> dispose());
-
+//The password reset is confirmed:
         ConfirmButton.addActionListener(e -> {
             String pw = new String(passwordField1.getPassword());
             String vpw = new String(passwordField2.getPassword());
@@ -32,7 +32,7 @@ public class Restablishpassword extends JFrame {
                 JOptionPane.showMessageDialog(this, "Please fill in both fields.");
                 return;
             }
-
+//Enforcement of validation:
 
             if (!pw.equals(vpw)) {
                 JOptionPane.showMessageDialog(this, "Passwords do not match.");

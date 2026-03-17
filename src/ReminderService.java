@@ -20,7 +20,7 @@ public class ReminderService {
 
         System.out.println("ReminderService started – checks hourly for tomorrow's appointments.");
     }
-    //Retreiving the appointments that are happening exactly on the next day:
+    //Retrieving the appointments that are happening exactly on the next day:
     private static void sendReminders() {
         System.out.println("ReminderService: Running check at " + java.time.LocalDateTime.now());
 

@@ -60,7 +60,7 @@ public class APPOINTMENT extends JFrame {
         g.fill = GridBagConstraints.HORIZONTAL;
         g.anchor = GridBagConstraints.WEST;
 
-        // Doctor
+        // Doctor:
         addLabel(form, "Select Doctor:", g, 0, 0);
         doctorCombo = new JComboBox<>();
         doctorCombo.setFont(new Font("Arial", Font.PLAIN, 13));
@@ -69,14 +69,14 @@ public class APPOINTMENT extends JFrame {
         g.gridx = 1; g.gridy = 0; g.weightx = 1;
         form.add(doctorCombo, g);
 
-        // Procedure
+        // Procedure type:
         addLabel(form, "Select Procedure:", g, 0, 1);
         procedureCombo = new JComboBox<>();
         styleCombo(procedureCombo);
         g.gridx = 1; g.gridy = 1;
         form.add(procedureCombo, g);
 
-        // Date
+        // Date of procedure
         addLabel(form, "Select Date:", g, 0, 2);
         SpinnerDateModel dateModel = new SpinnerDateModel();
         dateSpinner = new JSpinner(dateModel);
@@ -86,7 +86,7 @@ public class APPOINTMENT extends JFrame {
         g.gridx = 1; g.gridy = 2;
         form.add(dateSpinner, g);
 
-        // Time
+        // Label for time:
         addLabel(form, "Select Time:", g, 0, 3);
         timeCombo = new JComboBox<>(new String[]{
                 "08:00","09:00","10:00","11:00","13:00","14:00","15:00","16:00"
@@ -95,7 +95,7 @@ public class APPOINTMENT extends JFrame {
         g.gridx = 1; g.gridy = 3;
         form.add(timeCombo, g);
 
-        // Status label
+        //Status of the appointment:
         statusLabel = new JLabel(" ", SwingConstants.CENTER);
         statusLabel.setForeground(Color.YELLOW);
         statusLabel.setFont(new Font("Arial", Font.BOLD, 12));

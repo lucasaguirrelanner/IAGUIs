@@ -21,7 +21,7 @@ public class Account extends JFrame {
         this.userName  = name;
 
         buildUI();
-
+//The Account Dashboard is displayed
         setTitle("Duperly & Lanner Grupo Dental");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(800, 700);
@@ -34,7 +34,7 @@ public class Account extends JFrame {
         MainPanel = new JPanel(new BorderLayout(0, 0));
         MainPanel.setBackground(new Color(30, 30, 60));
 
-
+//Users are greeted with their display name:
         welcomeLabel = new JLabel("WELCOME, " + userName.toUpperCase());
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 32));
         welcomeLabel.setForeground(new Color(228, 122, 50));
@@ -46,6 +46,7 @@ public class Account extends JFrame {
         grid.setBackground(new Color(30, 30, 60));
         grid.setBorder(new EmptyBorder(20, 30, 20, 30));
 
+        //Buttons created for allowing the user to book, change, view their appointments or modify their account:
         bookappointment            = outlineButton("Book an Appointment");
         changeAnAppointmentButton  = outlineButton("Change an Appointment");
         viewYourAppointmentsButton = outlineButton("View your appointments");
@@ -58,7 +59,7 @@ public class Account extends JFrame {
 
         MainPanel.add(grid, BorderLayout.CENTER);
 
-
+//Users can go back to the Main Menu:
         gobackbutton = outlineButton("Go Back");
         JPanel south = new JPanel(new BorderLayout());
         south.setBackground(new Color(30, 30, 60));
@@ -67,7 +68,7 @@ public class Account extends JFrame {
         MainPanel.add(south, BorderLayout.SOUTH);
 
         setContentPane(MainPanel);
-
+//The listeners of the previously mentioned buttons:
         bookappointment.addActionListener(e -> {
             if (DatabaseHelper.hasFamilyMembers(userEmail)) {
                 new FAMAPPOINTMENT(userEmail, userName);
