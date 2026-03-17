@@ -27,7 +27,7 @@ public class FAMAPPOINTMENT extends JFrame {
         this.contactEmail = email;
         this.userName = name;
         this.parentName = name;
-
+//Panel:
         setTitle("Duperly & Lanner Grupo Dental – Family Appointment");
         setSize(820, 650);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -54,7 +54,7 @@ public class FAMAPPOINTMENT extends JFrame {
         form.setBackground(new Color(30, 30, 60));
         form.setBorder(new EmptyBorder(10, 60, 10, 60));
         GridBagConstraints g = new GridBagConstraints();
-        g.insets = new Insets(3, 8, 3, 8);  // Reduced from 8 to 3
+        g.insets = new Insets(3, 8, 3, 8);
         g.fill = GridBagConstraints.HORIZONTAL;
         g.anchor = GridBagConstraints.WEST;
 
@@ -107,10 +107,14 @@ public class FAMAPPOINTMENT extends JFrame {
 
         root.add(form, BorderLayout.CENTER);
 
-        // FIXED: Buttons with white background and dark text
+
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 15));
+
+//Checking dentist availability:
         btnPanel.setBackground(new Color(30, 30, 60));
         checkButton = styledButton("Check Availability", new Color(80, 140, 200));
+
+//Confirm booking button:
         confirmButton = styledButton("Confirm Booking", new Color(228, 122, 50));
         backButton = styledButton("Back", new Color(100, 100, 100));
         btnPanel.add(checkButton);
@@ -135,11 +139,10 @@ public class FAMAPPOINTMENT extends JFrame {
         p.add(l, g);
     }
 
-    // FIXED: Buttons now have white/light background with dark text
     private JButton styledButton(String text, Color accentColor) {
         JButton btn = new JButton(text);
         btn.setBackground(Color.WHITE);
-        btn.setForeground(accentColor);  // Dark colored text
+        btn.setForeground(accentColor);
         btn.setFont(new Font("Arial", Font.BOLD, 13));
         btn.setFocusPainted(false);
         btn.setBorderPainted(true);
@@ -155,17 +158,18 @@ public class FAMAPPOINTMENT extends JFrame {
         combo.setFont(new Font("Arial", Font.PLAIN, 13));
     }
 
+    //All family members are loaded so they are options that the user can choose to make appointments for:
     private void loadMembers() {
         memberDetails = DatabaseHelper.getFamilyMembersDetailed(contactEmail);
         memberCombo.removeAllItems();
         memberCombo.addItem(MYSELF_LABEL);
         for (String[] m : memberDetails) memberCombo.addItem(m[1]);
     }
-
+    //Retreiving all available doctors:
     private void loadDoctors() {
         doctorCombo.removeAllItems();
 
-        // Use the DB flag instead of string-matching
+
         List<String> names = isBookingForSelf()
                 ? DatabaseHelper.getDentistNames()
                 : DatabaseHelper.getDentistNamesForChildren();
@@ -175,8 +179,8 @@ public class FAMAPPOINTMENT extends JFrame {
                 doctorCombo.addItem("Dr. Smith");
             } else {
                 JOptionPane.showMessageDialog(this,
-                        "No paediatric dentists found in the database.\n" +
-                                "Please ensure Agnes and Vanessa are added to the Dentist table.",
+                        "No paediatric dentists found in the database.\n"
+                        ,
                         "No Paediatric Dentist", JOptionPane.WARNING_MESSAGE);
             }
         } else {
@@ -184,7 +188,7 @@ public class FAMAPPOINTMENT extends JFrame {
         }
         loadProcedures();
     }
-
+    //All  procedures accessible to a specific dentist are taken into account and displayed here:
     private void loadProcedures() {
         String doctor = (String) doctorCombo.getSelectedItem();
         if (doctor == null) return;
@@ -193,12 +197,14 @@ public class FAMAPPOINTMENT extends JFrame {
         refreshBlockedSlots();
     }
 
+//Preventing overlapping:
+
     private void refreshBlockedSlots() {
         String doctor = (String) doctorCombo.getSelectedItem();
         if (doctor == null) return;
         LocalDate date = getSelectedDate();
 
-        // Check the doctor works at all on this day
+
         boolean scheduleExists = DatabaseHelper.doctorHasAnySchedule(doctor);
         if (scheduleExists && !DatabaseHelper.isDoctorWorkingOnDate(doctor, date)) {
             timeCombo.removeAllItems();
@@ -209,12 +215,12 @@ public class FAMAPPOINTMENT extends JFrame {
             return;
         }
 
-        // Get only slots within this doctor's actual working hours for this day
+
         List<String> workingSlots = DatabaseHelper.getWorkingSlotsForDoctorOnDate(doctor, date);
 
-        // Remove any of those slots that are already booked
-        List<String> blocked = DatabaseHelper.getBlockedSlotsForDoctorOnDate(doctor, date);
 
+        List<String> blocked = DatabaseHelper.getBlockedSlotsForDoctorOnDate(doctor, date);
+//Removing unavailable slots as options:
         timeCombo.removeAllItems();
         for (String slot : workingSlots) {
             if (!blocked.contains(slot)) timeCombo.addItem(slot);
@@ -227,6 +233,7 @@ public class FAMAPPOINTMENT extends JFrame {
             statusLabel.setText(" ");
         }
     }
+    //Checking if there is availability:
     private void checkAvailability() {
         String doctor = (String) doctorCombo.getSelectedItem();
         String procedure = (String) procedureCombo.getSelectedItem();
@@ -234,18 +241,20 @@ public class FAMAPPOINTMENT extends JFrame {
         if (doctor == null || procedure == null || time == null) {
             statusLabel.setText("Please select all fields.");
             return;
-        }
+        } //Slot is available:
         int dur = DatabaseHelper.getProcedureDuration(procedure);
         LocalDateTime start = buildDateTime(time);
         if (DatabaseHelper.isSlotAvailable(doctor, start, dur)) {
             statusLabel.setText("✔ Available! Ends at: " +
                     start.plusMinutes(dur).format(DateTimeFormatter.ofPattern("HH:mm")));
             statusLabel.setForeground(Color.GREEN);
-        } else {
+        } else { //Slot is unavailable:
             statusLabel.setText("✘ Slot unavailable. Choose another time.");
             statusLabel.setForeground(Color.RED);
         }
     }
+
+//For officially booking an appointment:
 
     private void bookAppointment() {
         String doctor    = (String) doctorCombo.getSelectedItem();
@@ -276,7 +285,7 @@ public class FAMAPPOINTMENT extends JFrame {
                     ? parentName
                     : DatabaseHelper.getFirstName(contactEmail);
 
-            // One appointment per day — account holder
+            // One appointment per day enforcement— parent
             if (DatabaseHelper.patientHasAppointmentOnDate(contactEmail, start.toLocalDate())) {
                 JOptionPane.showMessageDialog(this,
                         "You already have an appointment on this date.\n" +
@@ -296,7 +305,7 @@ public class FAMAPPOINTMENT extends JFrame {
             familyId    = Integer.parseInt(member[0]);
             isFamilyMbr = true;
 
-            // One appointment per day — family member
+            // One appointment per day enforcement — family member
             if (DatabaseHelper.familyMemberHasAppointmentOnDate(familyId, start.toLocalDate())) {
                 JOptionPane.showMessageDialog(this,
                         patientName + " already has an appointment on this date.\n" +
@@ -306,6 +315,7 @@ public class FAMAPPOINTMENT extends JFrame {
             }
         }
 
+//For calculating the end time of an appointment:
         String endTime = start.plusMinutes(dur).format(DateTimeFormatter.ofPattern("HH:mm"));
         String msg = String.format(
                 "<html><b>Confirm appointment%s:</b><br><br>" +
@@ -324,6 +334,8 @@ public class FAMAPPOINTMENT extends JFrame {
                 "Confirm Appointment", JOptionPane.YES_NO_OPTION);
         if (choice != JOptionPane.YES_OPTION) return;
 
+//the boolean establishes that a new appointment has been officially created:
+
         boolean ok = DatabaseHelper.createAppointment(
                 contactEmail, patientName, start, procedure, doctor, isFamilyMbr, familyId);
 
@@ -338,6 +350,8 @@ public class FAMAPPOINTMENT extends JFrame {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    //Identifying if the booking is for the account holder, not a family member:
     private boolean isBookingForSelf() {
         return MYSELF_LABEL.equals(memberCombo.getSelectedItem());
     }

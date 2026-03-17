@@ -1,5 +1,3 @@
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -7,11 +5,12 @@ import java.util.TimerTask;
 
 public class ReminderService {
 
-    private static final long CHECK_INTERVAL_MS = 60L * 60L * 1000L; // Every hour
+    //Constantly checking for the status of appointments every hour:
+    private static final long CHECK_INTERVAL_MS = 60L * 60L * 1000L;
 
 
     public static void start() {
-        Timer timer = new Timer("ReminderService", true); // daemon = stops with JVM
+        Timer timer = new Timer("ReminderService", true);
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -21,7 +20,7 @@ public class ReminderService {
 
         System.out.println("ReminderService started – checks hourly for tomorrow's appointments.");
     }
-
+    //Retreiving the appointments that are happening exactly on the next day:
     private static void sendReminders() {
         System.out.println("ReminderService: Running check at " + java.time.LocalDateTime.now());
 
@@ -30,7 +29,7 @@ public class ReminderService {
         System.out.println("ReminderService: Found " + appointments.size() + " appointment(s) for tomorrow.");
 
         if (appointments.isEmpty()) return;
-
+//Identifying the elements required to send the reminder:
         for (String[] appt : appointments) {
             String contactEmail  = appt[0];
             String patientName   = appt[1];
@@ -57,7 +56,7 @@ public class ReminderService {
 
                 System.out.println("ReminderService: Parsed date OK — " + appointmentDate);
                 System.out.println("ReminderService: Sending email to " + contactEmail + "...");
-
+                //Confirming that the reminder was successfully sent to the patient:
                 boolean sent = EmailService.sendAppointmentReminder(
                         contactEmail, patientName, appointmentDate, procedureType);
 

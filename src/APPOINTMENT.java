@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 public class APPOINTMENT extends JFrame {
-
+    //Panel:
     private JPanel APPPanel;
     private JLabel ProcedureLabel;
     private final String userEmail;
@@ -21,12 +21,12 @@ public class APPOINTMENT extends JFrame {
     private JButton checkButton, confirmButton, backButton;
     private JLabel statusLabel;
 
-    // ── Existing two-arg constructor — all current call sites still compile ──
+
     public APPOINTMENT(String email, String name) {
         this(email, name, false);
     }
 
-    // ── New three-arg constructor used when booking for a child ──
+
     public APPOINTMENT(String email, String name, boolean isChild) {
         this.userEmail = email;
         this.userName  = name;
@@ -150,7 +150,7 @@ public class APPOINTMENT extends JFrame {
         combo.setForeground(new Color(30, 30, 60));
         combo.setFont(new Font("Arial", Font.PLAIN, 13));
     }
-
+    //Retreiving the available doctors, if patient is a child, only the 2 doctors who also attend children will be displayed as options:
     private void loadDoctors() {
         doctorCombo.removeAllItems();
         List<String> names = isChild
@@ -169,7 +169,7 @@ public class APPOINTMENT extends JFrame {
         }
         loadProcedures();
     }
-
+    //Retreiving all of the procedures per dentist:
     private void loadProcedures() {
         String doctor = (String) doctorCombo.getSelectedItem();
         if (doctor == null) return;
@@ -178,13 +178,13 @@ public class APPOINTMENT extends JFrame {
         for (String proc : procs) procedureCombo.addItem(proc);
         refreshBlockedSlots();
     }
-
+    //Refreshing booked slots to prevent overlapping bookings:
     private void refreshBlockedSlots() {
         String doctor = (String) doctorCombo.getSelectedItem();
         if (doctor == null) return;
         LocalDate date = getSelectedDate();
 
-        // Check the doctor works at all on this day
+//Ensuring the doctor is working for the selected date:
         boolean scheduleExists = DatabaseHelper.doctorHasAnySchedule(doctor);
         if (scheduleExists && !DatabaseHelper.isDoctorWorkingOnDate(doctor, date)) {
             timeCombo.removeAllItems();
@@ -195,10 +195,10 @@ public class APPOINTMENT extends JFrame {
             return;
         }
 
-        // Get only slots within this doctor's actual working hours for this day
+
         List<String> workingSlots = DatabaseHelper.getWorkingSlotsForDoctorOnDate(doctor, date);
 
-        // Remove any of those slots that are already booked
+
         List<String> blocked = DatabaseHelper.getBlockedSlotsForDoctorOnDate(doctor, date);
 
         timeCombo.removeAllItems();
@@ -213,6 +213,7 @@ public class APPOINTMENT extends JFrame {
             statusLabel.setText(" ");
         }
     }
+    //Checking iof a dentist has availability for the selected time/date:
     private void checkAvailability() {
         String doctor    = (String) doctorCombo.getSelectedItem();
         String procedure = (String) procedureCombo.getSelectedItem();
@@ -234,6 +235,7 @@ public class APPOINTMENT extends JFrame {
         }
     }
 
+    //Booking the appointment logic:
     private void bookAppointment() {
         String doctor    = (String) doctorCombo.getSelectedItem();
         String procedure = (String) procedureCombo.getSelectedItem();
@@ -253,13 +255,13 @@ public class APPOINTMENT extends JFrame {
                     "Slot Unavailable", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
+//Patient must exist, coincide with the DB info:
         String patientName = DatabaseHelper.getPatientNameByEmail(userEmail);
         if (patientName == null) {
             JOptionPane.showMessageDialog(this, "Error: Could not retrieve patient info.");
             return;
         }
-
+//Enforcement of the 1 appointment per patient a day rule:
         if (DatabaseHelper.patientHasAppointmentOnDate(userEmail, start.toLocalDate())) {
             JOptionPane.showMessageDialog(this,
                     "You already have an appointment on this date.\n" +
@@ -280,7 +282,7 @@ public class APPOINTMENT extends JFrame {
                 patientName, doctor, procedure,
                 start.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                 time, endTime, userEmail);
-
+//Confirming a booking:
         int choice = JOptionPane.showConfirmDialog(this, confirm,
                 "Confirm Appointment", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (choice != JOptionPane.YES_OPTION) return;

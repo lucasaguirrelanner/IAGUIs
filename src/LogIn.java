@@ -17,7 +17,7 @@ public class LogIn extends JFrame {
         setSize(800, 700);
         setLocationRelativeTo(null);
 
-        // FORGOT PASSWORD LOGIC
+        //Users will be able to reestablish their password by verifying that they are the actual user with their email address:
         ForgotMyButton.addActionListener(e -> {
             String emailToReset = JOptionPane.showInputDialog(this, "Enter your registered email address:");
             if (emailToReset != null && !emailToReset.trim().isEmpty()) {
@@ -28,12 +28,10 @@ public class LogIn extends JFrame {
                 }
             }
         });
-
-        // LOGIN LOGIC
         LoginButton.addActionListener(e -> {
             String user = txt_user.getText().trim();
             String pass = new String(txt_password.getPassword());
-
+//Users can only log in as long as their credentials are fully written, and these coincide with what is stored in the DB:
             if (user.isEmpty() || pass.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please enter both username and password.");
                 return;
@@ -48,10 +46,12 @@ public class LogIn extends JFrame {
                     return;
                 }
 
+
                 String name = DatabaseHelper.getFirstName(email);
 
                 JOptionPane.showMessageDialog(this, "Welcome back, " + name + "!");
 
+                //If login is successful, users will be taken to their account's dashboard:
 
                 new Account(email, name).setVisible(true);
                 dispose();
@@ -68,7 +68,6 @@ public class LogIn extends JFrame {
         });
 
         setVisible(true);
-
 
     }
 }

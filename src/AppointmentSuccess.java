@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.EmptyBorder;
 
+//Success window: displays a success message to the user, allowing them to return to their dashboard afterward:
 
 public class AppointmentSuccess extends JFrame {
     private String sessionEmail;
@@ -9,7 +10,8 @@ public class AppointmentSuccess extends JFrame {
     public AppointmentSuccess(String patient, String procedure, String time, String email, String name) {
         this.sessionEmail = email;
         this.sessionName = name;
-        // --- Branding & Setup ---
+
+        //How the confirmation is displayed in the platform:
         setTitle("Booking Confirmed - Duperly & Lanner");
         setSize(450, 350);
         setLocationRelativeTo(null);
@@ -17,17 +19,16 @@ public class AppointmentSuccess extends JFrame {
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(new Color(30, 30, 60)); // Navy Blue
+        mainPanel.setBackground(new Color(30, 30, 60));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
-        // --- Success Icon/Header ---
+
         JLabel successHeader = new JLabel("BOOKING SUCCESSFUL!");
-        successHeader.setForeground(new Color(228, 122, 50)); // Orange
+        successHeader.setForeground(new Color(228, 122, 50));
         successHeader.setFont(new Font("Arial", Font.BOLD, 22));
         successHeader.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // --- Detail Labels ---
-        // Using HTML for better formatting within the labels
+
         JLabel detailsLabel = new JLabel("<html><div style='text-align: center; color: white; font-size: 12px;'>" +
                 "<br>Your appointment has been added to our schedule.<br><br>" +
                 "<b>Patient:</b> " + patient + "<br>" +
@@ -37,7 +38,7 @@ public class AppointmentSuccess extends JFrame {
                 "</div></html>");
         detailsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // --- Action Button ---
+        //Return to dashboard button:
         JButton btnReturn = new JButton("Return to Dashboard");
         btnReturn.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnReturn.setBackground(new Color(228, 122, 50));
@@ -47,12 +48,12 @@ public class AppointmentSuccess extends JFrame {
         btnReturn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         btnReturn.addActionListener(e -> {
-                    new Account(sessionEmail, sessionName);
-                    dispose();
+            new Account(sessionEmail, sessionName);
+            dispose();
 
         });
 
-        // --- Assembly ---
+
         mainPanel.add(successHeader);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         mainPanel.add(detailsLabel);
@@ -61,7 +62,7 @@ public class AppointmentSuccess extends JFrame {
 
         add(mainPanel);
 
-        // Final polish: ensure the window is visible
+
         setVisible(true);
     }
 }

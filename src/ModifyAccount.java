@@ -9,19 +9,19 @@ public class ModifyAccount extends JFrame {
     public ModifyAccount(String email) {
         this.userEmail = email;
 
-        // --- Window Setup ---
+
         setTitle("Account Settings - Duperly & Lanner");
         setSize(500, 600);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // --- Main Panel with Branding (Criterion #10) ---
+        //Creation of the appointment modification panel:
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(new Color(30, 30, 60)); // Navy Blue
+        mainPanel.setBackground(new Color(30, 30, 60));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
 
-        // --- Section 1: Update Name ---
+        //For users that wish to update their display name:
         JLabel nameLabel = new JLabel("Update Your Display Name:");
         nameLabel.setForeground(Color.WHITE);
         nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -30,7 +30,7 @@ public class ModifyAccount extends JFrame {
         nameField.setMaximumSize(new Dimension(300, 30));
 
         JButton updateNameBtn = new JButton("Save New Name");
-        styleButton(updateNameBtn, new Color(228, 122, 50)); // Orange
+        styleButton(updateNameBtn, new Color(228, 122, 50));
 
         updateNameBtn.addActionListener(e -> {
             String newName = nameField.getText().trim();
@@ -41,19 +41,19 @@ public class ModifyAccount extends JFrame {
             }
         });
 
-        // --- Section 2: Password Security ---
+//In case they want to change their password:
         JButton passBtn = new JButton("Change Password");
         styleButton(passBtn, new Color(100, 100, 100)); // Grey
 
         passBtn.addActionListener(e -> new Restablishpassword(email));
 
-        // --- Section 3: Family Management (Criterion #1) ---
+        //For family accounts, they can manage their members through this button:
         JButton familyBtn = new JButton("Manage Family Members");
         styleButton(familyBtn, new Color(100, 100, 100)); // Grey
 
         familyBtn.addActionListener(e -> new FamilyEditor(email));
 
-        // --- Layout Assembly ---
+
         addSpace(20);
         mainPanel.add(nameLabel);
         addSpace(10);
@@ -71,16 +71,16 @@ public class ModifyAccount extends JFrame {
         setVisible(true);
     }
 
-    // UI Helper: Adds vertical gaps
+
     private void addSpace(int height) {
         mainPanel.add(Box.createRigidArea(new Dimension(0, height)));
     }
 
-    // UI Helper: Standardizes button looks
+
     private void styleButton(JButton btn, Color bgColor) {
         btn.setBackground(bgColor);
-        btn.setForeground(Color.WHITE);          // always white text — readable on any dark/orange bg
-        btn.setOpaque(true);                     // required on macOS/Nimbus L&F
+        btn.setForeground(Color.WHITE);
+        btn.setOpaque(true);
         btn.setBorderPainted(false);
         btn.setAlignmentX(Component.CENTER_ALIGNMENT);
         btn.setMaximumSize(new Dimension(250, 40));

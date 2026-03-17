@@ -7,7 +7,7 @@ public class Account extends JFrame {
     private final String userEmail;
     private final String userName;
 
-    // Exact field names preserved from the original .form file
+
     private JPanel  MainPanel;
     private JButton gobackbutton;
     private JButton bookappointment;
@@ -30,18 +30,18 @@ public class Account extends JFrame {
     }
 
     private void buildUI() {
-        // ── Root ──────────────────────────────────────────────────────────
+
         MainPanel = new JPanel(new BorderLayout(0, 0));
         MainPanel.setBackground(new Color(30, 30, 60));
 
-        // ── Welcome label (top-left, matching screenshot) ─────────────────
+
         welcomeLabel = new JLabel("WELCOME, " + userName.toUpperCase());
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 32));
         welcomeLabel.setForeground(new Color(228, 122, 50));
         welcomeLabel.setBorder(new EmptyBorder(40, 30, 30, 30));
         MainPanel.add(welcomeLabel, BorderLayout.NORTH);
 
-        // ── 2x2 button grid (centre) ──────────────────────────────────────
+
         JPanel grid = new JPanel(new GridLayout(2, 2, 30, 30));
         grid.setBackground(new Color(30, 30, 60));
         grid.setBorder(new EmptyBorder(20, 30, 20, 30));
@@ -58,7 +58,7 @@ public class Account extends JFrame {
 
         MainPanel.add(grid, BorderLayout.CENTER);
 
-        // ── Go Back button (full-width, bottom) ───────────────────────────
+
         gobackbutton = outlineButton("Go Back");
         JPanel south = new JPanel(new BorderLayout());
         south.setBackground(new Color(30, 30, 60));
@@ -68,10 +68,9 @@ public class Account extends JFrame {
 
         setContentPane(MainPanel);
 
-        // ── Action listeners ──────────────────────────────────────────────
         bookappointment.addActionListener(e -> {
             if (DatabaseHelper.hasFamilyMembers(userEmail)) {
-                new FAMAPPOINTMENT(userEmail, userName); // Add userName here!
+                new FAMAPPOINTMENT(userEmail, userName);
             } else {
                 new APPOINTMENT(userEmail, userName);
             }
@@ -90,7 +89,7 @@ public class Account extends JFrame {
         });
     }
 
-    /** White-bordered button with orange text — matches the screenshot style exactly. */
+
     private JButton outlineButton(String text) {
         JButton btn = new JButton(text);
         btn.setBackground(new Color(30, 30, 60));
@@ -103,7 +102,7 @@ public class Account extends JFrame {
                 BorderFactory.createLineBorder(Color.WHITE, 2, true),
                 new EmptyBorder(14, 20, 14, 20)
         ));
-        // Subtle hover highlight
+
         btn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent e) {
                 btn.setBackground(new Color(50, 50, 90));

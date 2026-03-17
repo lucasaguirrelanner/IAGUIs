@@ -5,29 +5,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
-/**
- * EmailService – FIXED to load credentials from config.properties
- * instead of environment variables, which are often not set in IntelliJ.
- *
- * Add these two lines to your config.properties file:
- *   clinic.email=youraddress@gmail.com
- *   clinic.password=xxxx xxxx xxxx xxxx   (16-char Gmail App Password)
- *
- * IMPORTANT – Gmail requires an App Password, NOT your normal Gmail password.
- * Steps to get one:
- *   1. Go to myaccount.google.com → Security
- *   2. Enable 2-Step Verification (required first)
- *   3. Search "App Passwords" in the Google Account search bar
- *   4. Create one → App = Mail, Device = Windows Computer
- *   5. Copy the 16-character code into config.properties (no spaces needed)
- */
 public class EmailService {
+//connects the program with the Email program, loads the credentials:
 
     private static final String SMTP_HOST   = "smtp.gmail.com";
     private static final String SMTP_PORT   = "587";
     private static final String CLINIC_NAME = "Duperly & Lanner Grupo Dental";
 
-    // Loaded once from config.properties
     private static final String SENDER_EMAIL;
     private static final String SENDER_PASSWORD;
 
@@ -45,10 +29,7 @@ public class EmailService {
         SENDER_PASSWORD = password;
     }
 
-    // =========================================================
-    // PUBLIC API
-    // =========================================================
-
+    //Sends the confirmation message to the patient who just booked an appointment:
     public static boolean sendAppointmentConfirmation(
             String patientEmail, String patientName,
             LocalDateTime appointmentDate, String procedureType, String doctorName) {
@@ -64,6 +45,7 @@ public class EmailService {
         }
     }
 
+    //the appointment is officially sent to the patient:
     public static boolean sendAppointmentReminder(
             String patientEmail, String patientName,
             LocalDateTime appointmentDate, String procedureType) {
@@ -78,10 +60,11 @@ public class EmailService {
             return false;
         }
     }
-
+    //For patients that cancel appointments—cancellation confirmation boolean:
     public static boolean sendCancellationEmail(
             String patientEmail, String patientName, LocalDateTime appointmentDate) {
         try {
+//Format of the cancellation email:
             String formatted = appointmentDate.format(
                     DateTimeFormatter.ofPattern("EEEE, MMMM dd, yyyy 'at' hh:mm a"));
             String body = String.format("""
@@ -101,10 +84,7 @@ public class EmailService {
         }
     }
 
-    // =========================================================
-    // PRIVATE HELPERS
-    // =========================================================
-
+    //Configuring the STMP email session with the clinic's credentials:
     private static boolean sendEmail(String recipientEmail, String subject, String htmlBody) {
         if (SENDER_EMAIL == null || SENDER_PASSWORD == null) {
             System.err.println("EmailService ERROR: clinic.email or clinic.password " +
@@ -141,7 +121,7 @@ public class EmailService {
             return false;
         }
     }
-
+    //Setting up the message that will be sent to the patient:
     private static String buildConfirmationEmail(
             String name, String dateTime, String procedure, String doctor) {
         return String.format("""

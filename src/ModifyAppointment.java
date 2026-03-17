@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class ModifyAppointmentForm extends JFrame {
+public class ModifyAppointment extends JFrame {
     private JPanel MainPanel;
     private JComboBox<String> patientCombo;
     private JComboBox<String> procedureCombo;
@@ -12,46 +12,42 @@ public class ModifyAppointmentForm extends JFrame {
     private String userEmail;
     private String originalTime;
 
-    public ModifyAppointmentForm(String email, String oldTime, String oldPatient, String oldProc) {
+    public ModifyAppointment(String email, String oldTime, String oldPatient, String oldProc) {
         this.userEmail = email;
         this.originalTime = oldTime;
 
-        // --- UI Setup ---
         setContentPane(MainPanel);
         setTitle("Modify Appointment - Duperly & Lanner");
         setSize(600, 500);
         setLocationRelativeTo(null);
-        MainPanel.setBackground(new Color(30, 30, 60)); // Navy Blue
-
-        // Style the button
-        confirmBtn.setBackground(new Color(228, 122, 50)); // Orange
+        MainPanel.setBackground(new Color(30, 30, 60));
+        confirmBtn.setBackground(new Color(228, 122, 50));
         confirmBtn.setForeground(Color.BLACK);
 
-        // --- Data Population ---
-        // Pre-selecting the current appointment details
+        //Options that appear through combo boxes:
         patientCombo.setSelectedItem(oldPatient);
         procedureCombo.setSelectedItem(oldProc);
         timeCombo.setSelectedItem(oldTime);
 
-        // --- Logic ---
+
         confirmBtn.addActionListener(e -> {
             String newTime = (String) timeCombo.getSelectedItem();
             String newProc = (String) procedureCombo.getSelectedItem();
             String newPatient = (String) patientCombo.getSelectedItem();
 
-            // 1. Validation: Check if anything actually changed
+            //This ensures that the user actually changes the time of the procedure:
             if (newTime.equals(oldTime) && newProc.equals(oldProc) && newPatient.equals(oldPatient)) {
                 JOptionPane.showMessageDialog(this, "No changes were made.");
                 return;
             }
 
-            // 2. Database Update
-            // This method in DatabaseHelper (which we refined earlier)
-            // will check for overlaps before returning true/false
+            //DB is updated:
+
             boolean success = DatabaseHelper.updateAppointmentDetails(
                     userEmail, originalTime, newTime, newProc, newPatient
             );
 
+            //Confirmation to the user that their appointment was successfully changed:
             if (success) {
                 JOptionPane.showMessageDialog(this,
                         "Appointment updated successfully!\nA confirmation email has been sent.",

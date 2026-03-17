@@ -8,6 +8,7 @@ import java.util.Properties;
 import java.time.LocalTime;
 
 public class DatabaseHelper {
+    //Connects to the database by entering with the config.properties credentials:
     private static String URL;
     private static String USER;
     private static String PASS;
@@ -31,10 +32,8 @@ public class DatabaseHelper {
     }
     public static Connection getConnection() throws SQLException { return connect(); }
 
-    // =========================================================
-    // REGISTRATION & AUTH
-    // =========================================================
 
+//If email already exists, will be used to block duplicate mails in CreateAccount2:
     public static boolean emailExists(String email) {
         String sql = "SELECT COUNT(*) FROM Patients WHERE email = ?";
         try (Connection c = connect(); PreparedStatement p = c.prepareStatement(sql)) {
@@ -43,9 +42,10 @@ public class DatabaseHelper {
             return rs.next() && rs.getInt(1) > 0;
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }
+//This boolean ensures that the information that a new user registered in the first part of the registration process (CreateAccount1) is saved:
 
     public static boolean saveInitialPatient(String fName, String lName, String email) {
-        // Use INSERT IGNORE to avoid duplicate-key errors if called twice
+
         String sql = "INSERT IGNORE INTO Patients (first_name, last_name, email, encrypted_password, username) " +
                 "VALUES (?, ?, ?, 'PENDING', 'PENDING')";
         try (Connection c = connect(); PreparedStatement p = c.prepareStatement(sql)) {
@@ -54,7 +54,7 @@ public class DatabaseHelper {
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }
 
-    // FIX: column is `encrypted_password`, not `password`
+//Updates DB as soon as the user has completed the complete account creation process:
     public static boolean RegisterFullAccount(String email, String user, String pass) {
         String sql = "UPDATE Patients SET username = ?, encrypted_password = ? WHERE email = ?";
         try (Connection c = connect(); PreparedStatement p = c.prepareStatement(sql)) {
@@ -63,7 +63,7 @@ public class DatabaseHelper {
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }
 
-    // FIX: use encrypted_password
+    //Checks if username and password exist and coincide in DB:
     public static boolean validateLogin(String user, String pass) {
         String sql = "SELECT * FROM Patients WHERE username = ? AND encrypted_password = ?";
         try (Connection c = connect(); PreparedStatement p = c.prepareStatement(sql)) {
@@ -72,10 +72,7 @@ public class DatabaseHelper {
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }
 
-    // =========================================================
-    // USER DATA
-    // =========================================================
-
+//Retrieves a patient's email based off of their username that is linked to their account in the DB:
     public static String getEmailByUsername(String user) {
         String sql = "SELECT email FROM Patients WHERE username = ?";
         try (Connection c = connect(); PreparedStatement p = c.prepareStatement(sql)) {
@@ -84,7 +81,7 @@ public class DatabaseHelper {
             return rs.next() ? rs.getString("email") : null;
         } catch (SQLException e) { return null; }
     }
-
+    //Retreives patient's first name:
     public static String getFirstName(String email) {
         String sql = "SELECT first_name FROM Patients WHERE email = ?";
         try (Connection c = connect(); PreparedStatement p = c.prepareStatement(sql)) {
@@ -93,7 +90,7 @@ public class DatabaseHelper {
             return rs.next() ? rs.getString("first_name") : "User";
         } catch (SQLException e) { return "User"; }
     }
-
+//Finding a patient's name using email address:
     public static String getPatientNameByEmail(String email) {
         String sql = "SELECT CONCAT(first_name,' ',last_name) AS full_name FROM Patients WHERE email = ?";
         try (Connection c = getConnection(); PreparedStatement p = c.prepareStatement(sql)) {
@@ -103,7 +100,7 @@ public class DatabaseHelper {
         } catch (Exception e) { e.printStackTrace(); return null; }
     }
 
-    // FIX: use encrypted_password
+    //updating DB when a user has updated one of their log in credentials:
     public static boolean updatePassword(String email, String newPass) {
         String sql = "UPDATE Patients SET encrypted_password = ? WHERE email = ?";
         try (Connection c = connect(); PreparedStatement p = c.prepareStatement(sql)) {
@@ -120,10 +117,7 @@ public class DatabaseHelper {
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }
 
-    // =========================================================
-    // FAMILY MANAGEMENT
-    // =========================================================
-
+    //boolean that loads all info of the child that was registered by the parent into DB:
     public static boolean saveFamilyMember(String parentEmail, String name, int age, String dob) {
         String sql = "INSERT INTO FamilyMembers (parent_email, member_name, age, dob) VALUES (?, ?, ?, ?)";
         try (Connection c = connect(); PreparedStatement p = c.prepareStatement(sql)) {
@@ -132,7 +126,7 @@ public class DatabaseHelper {
             return p.executeUpdate() > 0;
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }
-
+    //Retreiving fam members for fam accounts when booking appointments:
     public static List<String> getFamilyMembers(String parentEmail) {
         List<String> members = new ArrayList<>();
         String sql = "SELECT member_name FROM FamilyMembers WHERE parent_email = ?";
@@ -143,7 +137,7 @@ public class DatabaseHelper {
         } catch (SQLException e) { e.printStackTrace(); }
         return members;
     }
-
+    //For retreiving fam member details:
     public static List<String[]> getFamilyMembersDetailed(String parentEmail) {
         List<String[]> members = new ArrayList<>();
         String sql = "SELECT member_id, member_name, age, dob FROM FamilyMembers WHERE parent_email = ?";
@@ -160,6 +154,19 @@ public class DatabaseHelper {
         return members;
     }
 
+    //Verifies if fam member added fulfills required age to be part of a fam account:
+    public static boolean isChild(String name) {
+        String sql = "SELECT age FROM FamilyMembers WHEREW member_name = ?";
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, name);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next() && rs.getInt("age") < 18;
+        } catch (SQLException e) { return false; }
+
+    }
+
+//Family members can be deleted, DB needs to be updated:
     public static boolean deleteFamilyMember(String parentEmail, String memberName) {
         String sql = "DELETE FROM FamilyMembers WHERE parent_email = ? AND member_name = ?";
         try (Connection c = connect(); PreparedStatement p = c.prepareStatement(sql)) {
@@ -168,15 +175,12 @@ public class DatabaseHelper {
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }
 
+//If user has no fam members, they are only displayed options for booking and modifying info abt themselves:
     public static boolean hasFamilyMembers(String email) {
         return !getFamilyMembers(email).isEmpty();
     }
 
-    // =========================================================
-    // DENTISTS & PROCEDURES
-    // =========================================================
-
-    /** Returns list of "First Last" strings for all dentists. */
+//Retrieving the names of dentists for appointment bookings:
     public static List<String> getDentistNames() {
         List<String> names = new ArrayList<>();
         String sql = "SELECT DISTINCT CONCAT(first_name, IF(last_name IS NOT NULL," +
@@ -188,7 +192,7 @@ public class DatabaseHelper {
         } catch (SQLException e) { e.printStackTrace(); }
         return names;
     }
-
+//Only dentists Vanessa and Agnes attend children, hence retreiving their names as the only two options is helpful:
     public static List<String> getDentistNamesForChildren() {
         List<String> names = new ArrayList<>();
         String sql = "SELECT CONCAT(first_name, IF(last_name IS NOT NULL," +
@@ -200,6 +204,7 @@ public class DatabaseHelper {
         } catch (SQLException e) { e.printStackTrace(); }
         return names;
     }
+    //finding out a children's age:
     public static int getFamilyMemberAge(int memberId) {
         String sql = "SELECT age FROM FamilyMembers WHERE member_id = ?";
         try (Connection c = connect(); PreparedStatement p = c.prepareStatement(sql)) {
@@ -207,13 +212,9 @@ public class DatabaseHelper {
             ResultSet rs = p.executeQuery();
             if (rs.next()) return rs.getInt("age");
         } catch (SQLException e) { e.printStackTrace(); }
-        return 99; // safe fallback — treated as adult
+        return 99;
     }
-
-    /**
-     * Returns procedure names for a given doctor's full name.
-     * Format returned: "Procedure Name (X min)"
-     */
+//Each dentist has a select number of procedures given their specialty:
     public static List<String> getProceduresForDentist(String doctorFullName) {
         List<String> procs = new ArrayList<>();
         String sql = "SELECT pt.procedure_name, pt.base_duration " +
@@ -226,7 +227,7 @@ public class DatabaseHelper {
             while (rs.next())
                 procs.add(rs.getString("procedure_name") + " (" + rs.getInt("base_duration") + " min)");
         } catch (SQLException e) { e.printStackTrace(); }
-        // Fallback if table is empty
+
         if (procs.isEmpty()) {
             procs.add("Diagnostic (15 min)");
             procs.add("Oral Rehabilitation (30 min)");
@@ -236,7 +237,7 @@ public class DatabaseHelper {
         }
         return procs;
     }
-
+//Working hours vary depending on each dentist:
     public static List<String> getWorkingSlotsForDoctorOnDate(String doctorFullName, LocalDate date) {
         String[] allSlots = {"08:00","09:00","10:00","11:00","13:00","14:00","15:00","16:00"};
 
@@ -262,7 +263,7 @@ public class DatabaseHelper {
             }
         } catch (SQLException e) { e.printStackTrace(); }
 
-        if (opens.isEmpty()) return new ArrayList<>(); // doctor not working this day
+        if (opens.isEmpty()) return new ArrayList<>();
 
         List<String> valid = new ArrayList<>();
         for (String slot : allSlots) {
@@ -277,10 +278,9 @@ public class DatabaseHelper {
         }
         return valid;
     }
-
-    /** Returns duration in minutes for a procedure name (with or without the " (X min)" suffix). */
+    //To get the approximate duration of each appointment:
     public static int getProcedureDuration(String procedureDisplay) {
-        // Try to parse from display string first
+
         if (procedureDisplay.contains("(") && procedureDisplay.contains(" min)")) {
             try {
                 String num = procedureDisplay.substring(
@@ -303,19 +303,9 @@ public class DatabaseHelper {
         return 30; // default
     }
 
-    // =========================================================
-    // APPOINTMENT LOGIC
-    // =========================================================
-
-    /**
-     * Checks if a doctor is available at the given start time for the given duration.
-     * Blocks the slot if any existing appointment overlaps.
-     */
+    //Checks if time selected for booking is available, if not it stops the request, prevent overlapping:
     public static boolean isSlotAvailable(String doctorName, LocalDateTime newStart, int durationMinutes) {
-        // We need to check: no existing CONFIRMED/COMPLETED appointment for this doctor
-        // where the new slot [newStart, newStart+dur) overlaps with existing [existStart, existStart+existDur)
-        // Overlap: newStart < existEnd AND newEnd > existStart
-        // Since we don't store end_time, we derive existEnd by joining procedure_type
+
         String sql =
                 "SELECT a.appointment_date, " +
                         "  COALESCE(pt.base_duration, 30) AS base_duration " +
@@ -333,19 +323,16 @@ public class DatabaseHelper {
                 LocalDateTime existStart = rs.getTimestamp("appointment_date").toLocalDateTime();
                 int existDur = rs.getInt("base_duration");
                 LocalDateTime existEnd = existStart.plusMinutes(existDur);
-                // Check overlap
+
                 if (newStart.isBefore(existEnd) && newEnd.isAfter(existStart)) {
-                    return false; // Overlap found
+                    return false;
                 }
             }
-            return true; // No overlap
+            return true;
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }
 
-    /**
-     * Returns blocked start-times (as HH:mm strings) for a doctor on a given date.
-     * A time is "blocked" if it falls within an existing appointment's window.
-     */
+
     public static List<String> getBlockedSlotsForDoctorOnDate(String doctorName, LocalDate date) {
         List<String> blocked = new ArrayList<>();
         String[] allSlots = {"08:00","09:00","10:00","11:00","13:00","14:00","15:00","16:00"};
@@ -377,9 +364,7 @@ public class DatabaseHelper {
         return blocked;
     }
 
-    /**
-     * Creates appointment and automatically sends confirmation email.
-     */
+//Retreives all info necessary to store an app into DB:
     public static boolean createAppointment(
             String contactEmail, String patientName,
             LocalDateTime appointmentDate, String procedureType,
@@ -412,9 +397,6 @@ public class DatabaseHelper {
 
             int rows = p.executeUpdate();
             if (rows > 0) {
-                // FIX: Send email on a background thread so that:
-                //  1. A missing JAR (NoClassDefFoundError) cannot crash the UI thread
-                //  2. Email latency cannot delay showing the AppointmentSuccess screen
                 final String emailTo   = contactEmail;
                 final String pName     = patientName;
                 final LocalDateTime dt = appointmentDate;
@@ -426,16 +408,16 @@ public class DatabaseHelper {
                                 emailTo, pName, dt, proc, doc);
                         if (!sent) System.err.println("Warning: Appointment saved but email failed.");
                     } catch (Throwable t) {
-                        // Catches both Exception and Error (e.g. NoClassDefFoundError)
+
                         System.err.println("Email error (appointment still saved): " + t.getMessage());
                     }
                 }, "EmailSender").start();
-                return true;  // always return true if DB insert succeeded
+                return true;
             }
             return false;
         } catch (Exception e) { e.printStackTrace(); return false; }
     }
-
+//Enforcing the 1 appointment per day for every patient rule:
     public static boolean familyMemberHasAppointmentOnDate(int familyMemberId, LocalDate date) {
         String sql = "SELECT COUNT(*) FROM Appointments " +
                 "WHERE family_member_id = ? AND DATE(appointment_date) = ? " +
@@ -460,10 +442,7 @@ public class DatabaseHelper {
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }
 
-    /**
-     * Returns all appointments for a contact email, ordered by date descending.
-     * Returns: {id, patient_name, appointment_date, procedure_type, doctor_name, status}
-     */
+//Retrieving  a patient's appointments through their email:
     public static List<String[]> getAppointmentsByEmail(String contactEmail) {
         List<String[]> list = new ArrayList<>();
         String sql = "SELECT id, patient_name, appointment_date, procedure_type, doctor_name, status " +
@@ -483,9 +462,8 @@ public class DatabaseHelper {
         return list;
     }
 
-    /**
-     * Cancels appointment and sends cancellation email.
-     */
+//DB table Apppointments updated when app are rescheduled/cancelled:
+
     public static boolean cancelAppointment(int appointmentId, String contactEmail, String patientName) {
         String sql = "UPDATE Appointments SET status = 'CANCELLED' WHERE id = ? AND contact_email = ?";
         try (Connection c = getConnection(); PreparedStatement p = c.prepareStatement(sql)) {
@@ -498,7 +476,7 @@ public class DatabaseHelper {
                     ResultSet rs = p2.executeQuery();
                     if (rs.next()) {
                         LocalDateTime dt = rs.getTimestamp("appointment_date").toLocalDateTime();
-                        // Send on background thread so email errors never crash the UI
+
                         new Thread(() -> {
                             try {
                                 EmailService.sendCancellationEmail(contactEmail, patientName, dt);
@@ -514,10 +492,7 @@ public class DatabaseHelper {
         } catch (Exception e) { e.printStackTrace(); return false; }
     }
 
-    /**
-     * Reschedules an appointment to a new date/time.
-     * FIX: now uses correct column `appointment_date`.
-     */
+
     public static boolean rescheduleAppointment(int appointmentId, LocalDateTime newDate) {
         String sql = "UPDATE Appointments SET appointment_date = ?, status = 'CONFIRMED' WHERE id = ?";
         try (Connection c = connect(); PreparedStatement p = c.prepareStatement(sql)) {
@@ -527,10 +502,7 @@ public class DatabaseHelper {
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }
 
-    /**
-     * Gets appointments scheduled for tomorrow (for reminder emails).
-     * Returns: {contact_email, patient_name, appointment_date, procedure_type, doctor_name}
-     */
+//For reminder service: getting the list of appointments that patients need to get reminders for:
     public static List<String[]> getAppointmentsTomorrow() {
         List<String[]> list = new ArrayList<>();
         String sql = "SELECT contact_email, patient_name, appointment_date, " +
@@ -541,7 +513,7 @@ public class DatabaseHelper {
         try (Connection c = connect(); Statement st = c.createStatement()) {
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                // Read as Timestamp, then convert — avoids format ambiguity entirely
+
                 LocalDateTime dt = rs.getTimestamp("appointment_date").toLocalDateTime();
                 list.add(new String[]{
                         rs.getString("contact_email"),
@@ -554,11 +526,7 @@ public class DatabaseHelper {
         } catch (SQLException e) { e.printStackTrace(); }
         return list;
     }
-    /**
-     * Returns true if the given doctor has ANY schedule entries at all.
-     * Used as a fallback check — if the Dentist_Schedules table is empty,
-     * we skip the working-day restriction and show all time slots.
-     */
+
     public static boolean doctorHasAnySchedule(String doctorFullName) {
         String sql =
                 "SELECT COUNT(*) FROM Dentist_Schedules ds " +
@@ -571,13 +539,10 @@ public class DatabaseHelper {
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }
 
-    /**
-     * Returns true if the given doctor has a schedule entry for the day of the week
-     * that corresponds to the provided date.
-     */
+
     public static boolean isDoctorWorkingOnDate(String doctorFullName, LocalDate date) {
         String dayName = date.getDayOfWeek()
-                .getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.ENGLISH); // e.g. "Monday"
+                .getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.ENGLISH);
 
         String sql =
                 "SELECT COUNT(*) FROM Dentist_Schedules ds " +
@@ -593,20 +558,11 @@ public class DatabaseHelper {
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }
 
-    /**
-     * Updates procedure, patient name, and appointment time for a given appointment.
-     * Used by ModifyAppointmentForm.
-     * Parameters match the old signature so existing call sites compile unchanged:
-     *   email       – contact_email of the account holder
-     *   oldTime     – original appointment_date string (yyyy-MM-dd HH:mm:ss)
-     *   newTime     – new time as "HH:mm" (date is kept the same)
-     *   newProc     – new procedure_type value
-     *   newPatient  – new patient_name value
-     */
+
     public static boolean updateAppointmentDetails(
             String email, String oldTime, String newTime, String newProc, String newPatient) {
 
-        // Build the new appointment_date by combining the date part of oldTime with newTime
+
         String newDatetime;
         try {
             String datePart = oldTime.length() >= 10 ? oldTime.substring(0, 10) : oldTime;
@@ -616,13 +572,13 @@ public class DatabaseHelper {
             return false;
         }
 
-        // Check the new slot is actually available before updating
+
         try {
             java.time.LocalDateTime newDT = java.time.LocalDateTime.parse(
                     newDatetime, java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             int dur = getProcedureDuration(newProc);
 
-            // Fetch doctor name for the original appointment so we can check availability
+
             String doctorSql = "SELECT doctor_name FROM Appointments " +
                     "WHERE contact_email = ? AND appointment_date = ?";
             String doctor = null;
@@ -636,7 +592,7 @@ public class DatabaseHelper {
             if (doctor != null && !isSlotAvailable(doctor, newDT, dur)) return false;
 
         } catch (Exception e) {
-            // If parsing fails just attempt the update anyway
+
             System.err.println("Slot check skipped: " + e.getMessage());
         }
 

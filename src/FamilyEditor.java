@@ -3,12 +3,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-/**
- * FamilyEditor – lets a patient view, add, or remove family members.
- * FIX: updated to handle the 4-column result {id, name, age, dob} from
- *      DatabaseHelper.getFamilyMembersDetailed.
- * SUCCESS CRITERIA #2 – children from age 7 and up.
- */
 public class FamilyEditor extends JFrame {
     private JTable            familyTable;
     private DefaultTableModel model;
@@ -24,7 +18,8 @@ public class FamilyEditor extends JFrame {
         setLayout(new BorderLayout());
         getContentPane().setBackground(new Color(30, 30, 60));
 
-        // Table – show name / age / dob (hide internal id)
+        //this ensures that users cannot modify table values directly in the table but data can only be changed through the database updates.
+
         model = new DefaultTableModel(COLS, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
@@ -43,7 +38,7 @@ public class FamilyEditor extends JFrame {
 
         styleButton(addBtn); styleButton(deleteBtn); styleButton(backBtn);
 
-        // ADD
+        // Adding info: full name, age, date of birth (DOB)
         addBtn.addActionListener(e -> {
             String name   = JOptionPane.showInputDialog(this, "Member's Full Name:");
             if (name == null || name.trim().isEmpty()) return;
@@ -53,7 +48,7 @@ public class FamilyEditor extends JFrame {
 
             try {
                 int age = Integer.parseInt(ageStr.trim());
-                // Criterion #2 – minimum age is 7
+
                 if (age < 7) {
                     JOptionPane.showMessageDialog(this,
                             "The clinic accepts patients from age 7 and up.");
@@ -73,7 +68,7 @@ public class FamilyEditor extends JFrame {
             }
         });
 
-        // DELETE
+        // Delete
         deleteBtn.addActionListener(e -> {
             int row = familyTable.getSelectedRow();
             if (row < 0) {
@@ -99,17 +94,17 @@ public class FamilyEditor extends JFrame {
 
     private void refreshTable() {
         model.setRowCount(0);
-        // getFamilyMembersDetailed returns {id, name, age, dob}
+
         List<String[]> members = DatabaseHelper.getFamilyMembersDetailed(parentEmail);
         for (String[] m : members) {
-            model.addRow(new Object[]{m[1], m[2], m[3]}); // skip m[0]=id
+            model.addRow(new Object[]{m[1], m[2], m[3]});
         }
     }
 
     private void styleButton(JButton btn) {
         btn.setBackground(new Color(228, 122, 50));
         btn.setForeground(Color.WHITE);
-        btn.setOpaque(true);              // ← this line was missing
+        btn.setOpaque(true);
         btn.setFocusPainted(false);
         btn.setBorderPainted(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
